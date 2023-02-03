@@ -1,10 +1,10 @@
 
-AVRASM ver. 2.2.8  c:\users\admin\Documents\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Thu Feb 02 14:20:27 2023
+AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Fri Feb 03 08:29:15 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
-c:\users\admin\Documents\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm(17): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
+D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm(28): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
-c:\users\admin\Documents\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm(17): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
+D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm(28): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
                                  
                                  ;
                                  
@@ -826,10 +826,21 @@ c:\users\admin\Documents\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandB
                                  ;
                                  ; Created: 02-02-2023 07:46:14
                                  ; Author : Admin
+                                 ;NOTE COMPARE INSTRUCTION 
+                                 ; BREQ		BRANCH IF EQUAL				BRANCH IF Z=1 (ZERO FLAG)
+                                 ; BRNE		BRANCH IF NOT EQUAL			BRANCH IF Z=0 
+                                 ; BRSH		BRANCH IF SAME OR HIGHER	BRANCH IF C=0 (CARRY FLAG)
+                                 ; BRLO		BRANCH IF LOWER				BRANCH IF C=1
+                                 ; BRLT		BRANCH IF LESS THAN(SIGNED)	BRANCH IF S=1 (SIGN FLAG)
+                                 ; BRGE		BRANCH IF GREATER THAN OR EQUAL BRANCH IF S=0
+                                 ; BRVS		BRANCH IF OVERFLOW FLAG SET	BRANCH IF V=1(OVERFLOW FLAG)
+                                 ; BRVC		BRANCH IF OVERFLOW FLAG CLEAT	BRANCH IF V=0
                                  ;
-                                 
-                                 
+                                 ;
+                                 ;
                                  ; Replace with your application code
+                                 			.EQU VAL_1=27
+                                 			.EQU VAL_2=54
                                  			.EQU HEX_NUM = 0X315
                                  			.EQU RMND_L = 0X322
                                  			.EQU RMND_M = 0X323
@@ -934,7 +945,108 @@ c:\users\admin\Documents\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandB
 00002b 9300 0323                 			STS RMND_M, NUM
                                  
 00002d 9320 0324                 			STS RMND_H, QUOTIENT
+                                 	;;;AND POERATION
                                  
+00002f e345                      			LDI R20,0X35
+000030 704f                      			ANDI R20,0X0F
+                                 
+                                 	;;;;;;oring instrusction to set on pb5 and off pb2
+000031 9aba                      			sbi ddrb,2				;bit 2 of port b is output
+000032 9abd                      			SBI DDRB,5				;BIT 5 OF PORTB IS OUTPUT
+000033 b348                      			IN R20, PORTB			;MOVE PORTB TO R20,THE VALUE OF PORTB INSTEAD OF PINB BECAUSE WE WANT TO KNOW THE LAST VALUE OF PORTB NOT THE VALUE OF AVR CHIP PINS
+                                 
+000034 6044                      			ORI R20, 0B00000100		;SET BIT 2 OF R20 TO ONE
+000035 7d4f                      			ANDI R20,0B11011111		;CLEAR BIT 5 OF R20 TO ZERO
+000036 bb48                      			OUT PORTB,R20			;OUT R20 TO PORTB
+                                 
+                                 	;;;EOR ISNTRUCTION
+000037 e544                      			LDI R20,0X54
+000038 e758                      			LDI R21,0X78
+000039 2745                      			EOR R20,R21
+                                 	;;;READ AND TEST PORTB TO SEE WHETHER IT HAS THE VALUE 45H, IF IT DOES,SEND 99H PORTC OTHERWISE IT IS CLEARED
+                                 	;;; TO COME OUT OF THE LOOP CHANGE PORT B VALUE TO 0X45 DURING SIMULATION MANUALLY
+00003a ef4f                      			LDI R20,0XFF			;R20=0XFF
+00003b bb44                      			OUT DDRC,R20			;PORTC IS OUTPUT
+00003c e040                      			LDI R20,0X00			;R20=0
+00003d bb47                      			OUT DDRB,R20			;PORTB IS INPUT
+00003e bb45                      			OUT PORTC, R20			;PORTC=00
+00003f e455                      			LDI R21,0X45			;R21=0X45
+000040 b346                      	HERE:	IN R20,PINB				;GET A BYTE
+000041 2745                      			EOR R20,R21				;EX-OR WITH 0X45
+000042 f7e9                      			BRNE HERE				;BRANCH IF PORTB HAS VALUE OTHER THAN 45
+000043 e949                      			LDI R20,0X99			;R20=0X99
+000044 bb45                      			OUT PORTC,R20			;PORTC=99H
+                                 
+                                 	;;;COM INSTRUCTION COMPLEMENT
+                                 
+000045 9540                      			COM R20					;COMPLEMENT R20 VALUE
+                                 
+                                 	;;;NEG INSTRUCTION NEGATE TAKE 2'S COMPLEMENT OF A REGISTER
+                                 			
+000046 9551                      			NEG R21
+                                 	;; PROAGRAM TO MONITOR PORTB CONTINUOUSLY FOR TEH VALUE 63H ITSHOULD STOP MONITORING ONLY IF PORTB = 63H
+                                 		;;; TO COME OUT OF THE LOOP CHANGE PORT B VALUE TO 0X63 DURING SIMULATION MANUALLY
+000047 e040                      			LDI R20,0X00
+000048 bb47                      			OUT DDRB,R20			;PORTB IS INPUT
+000049 e653                      			LDI R21,0X63
+00004a b346                      AGAIN:		IN R20,PINB
+00004b 1745                      			CP R20,R21				;COMPARE WITH 0X63, Z=1 IF YES
+00004c f7e9                      			BRNE AGAIN				;GO TO AGAIN IF PORTB IS NOT EQUAL TO 0X63
+                                 	;;PROGRAM TO FIND THE GREATER OF THE VALUE 27 AND 54 AND PLACE IT IN R20
+                                 			
+00004d e14b                      			LDI R20,VAL_1			;R20=VAL_1
+00004e e356                      			LDI R21,VAL_2			;R21=VAL_2
+00004f 1754                      			CP R21,R20				;COMPARE R21 AND R20
+000050 f028                      			BRLO TEMP1				;IF R21<R20 (BRANCH IF LOWER) GOTO NEXT
+000051 e346                      			LDI R20,VAL_2
+000052 ef0f                      			LDI R16,0XFF
+000053 bb07                      			OUT DDRB,R16
+000054 e000                      			LDI R16,0X00
+000055 bb08                      			OUT PORTB,R16			;CLEAR PORTB AND PINB
+                                 	;; PORTB IS AN INPUT PORT CONNECTED TO TEMPERATURE SENSOR.
+                                 	;;PROGRAM TO READ THE TEMPERATURE AND TEST IT FOOR THE VALUE 75,
+                                 	;;ACCORDING THE TEST RESULT OF THE TEMPERATURE VALUE IN TO THE REGISTERS INDICATED BY THE FOLLOWING
+                                 	;; IF T =75			THEN R16 =T ;;R17=0;	R18=0
+                                 	;; IF T >75			THEN R16 =0 ;;R17=T;	R18=0
+                                 	;; IF T <75			THEN R16=0	;;R17=0;	R18=T	
+                                 	
+000056 e040                      TEMP1:		LDI R20,0X00			;R20 =0
+000057 bb47                      			OUT DDRB, R20			;PORTB = INPUT
+                                 			
+000058 2700                      			CLR R16					;R16=0
+000059 2711                      			CLR R17					;R17=0
+00005a 2722                      			CLR R18					;R18=0
+00005b b346                      			IN R20,PINB				; PINB TO R20
+00005c 344b                      			CPI R20,75				;COMPARE R20 (PORTB) AND 75
+00005d f410                      			BRSH SAME_HI
+                                 	;;; EXECUTES WHEN R20 <75
+00005e 2f24                      			MOV R18,R20
+00005f c004                      			RJMP P2
+                                 	;;;EXECUTES WHEN R20>=75	
+000060 f411                      SAME_HI:	BRNE HI
+                                 	;;EXECUTES WHEN R20=75
+000061 2f04                      			MOV R16, R20
+000062 c001                      			RJMP P2
+                                 	;;EXECUTES WHEN R20>75
+000063 2f14                      HI:			MOV R17,R20	
+                                 
+                                 	;;; PROGRAM TO ADD TWO SIGNED NUMBERS. TEH NUMBERS ARE IN R21 AND R22.
+                                 	;;; PROGRAM SHOULD STORE THE RESULT IN R21. 
+                                 	;;; IF THE RESULT IS NOT CORRECT THE PROGRAM SHOULD PUT 0XAA ON PORTA AND CLEAR R21
+                                 
+000064 ef5a                      P2:			LDI R21,0XFA		;R21 =0XFA
+000065 e065                      			LDI R22,0X05		;R22=0X05
+000066 ef7f                      			LDI R23,0XFF		;R23 =0XFF
+000067 bb7a                      			OUT DDRA, R23		;PORTA IS OUTPUT
+000068 0f56                      			ADD R21,R22			;R21 =R21+R22
+000069 f41b                      			BRVC HERE1			;IF V=0 (NO ERROR) THEN GO TO NEXT
+00006a ea7a                      			LDI R23,0XAA		;R23 =0XAA
+00006b bb7b                      			OUT PORTA, R23		;SEND 0XAA TO PORTA
+00006c e050                      			LDI R21,0X00		;CLEAR R21
+                                 
+                                 
+                                 
+00006d cfff                      	HERE1:	RJMP HERE1
 
 
 RESOURCE USE INFORMATION
@@ -954,37 +1066,37 @@ counted separately from r26..r31 here.
 "ATmega32" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  12 r17:   9 r18:  11 r19:   0 r20:   0 
-r21:   2 r22:   2 r23:   2 r24:   2 r25:   2 r26:   2 r27:   2 r28:   2 
+r13:   0 r14:   0 r15:   0 r16:  18 r17:  11 r18:  13 r19:   0 r20:  32 
+r21:  14 r22:   4 r23:   6 r24:   2 r25:   2 r26:   2 r27:   2 r28:   2 
 r29:   2 r30:   0 r31:   0 
-Registers used: 12 out of 35 (34.3%)
+Registers used: 13 out of 35 (37.1%)
 
 "ATmega32" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   1 add   :   3 adiw  :   0 and   :   0 
-andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+.lds  :   0 .sts  :   0 adc   :   1 add   :   4 adiw  :   0 and   :   0 
+andi  :   2 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   3 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
+brne  :   3 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   1 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   1 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   3 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  16 lds   :   1 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   1 movw  :   0 mul   :   1 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   0 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   1 rol   :   0 
-ror   :   0 sbc   :   1 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
+clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   4 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   1 cp    :   2 cpc   :   0 
+cpi   :   1 cpse  :   0 dec   :   3 eor   :   2 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   4 inc   :   3 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  36 lds   :   1 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :   4 movw  :   0 mul   :   1 muls  :   0 mulsu :   0 
+neg   :   1 nop   :   0 or    :   0 ori   :   1 out   :  11 pop   :   0 
+push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   3 rol   :   0 
+ror   :   0 sbc   :   1 sbci  :   0 sbi   :   2 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   4 
 sub   :   4 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 14 out of 113 (12.4%)
+Instructions used: 28 out of 113 (24.8%)
 
 "ATmega32" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000060     96      0     96   32768   0.3%
+[.cseg] 0x000000 0x0000dc    220      0    220   32768   0.7%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
