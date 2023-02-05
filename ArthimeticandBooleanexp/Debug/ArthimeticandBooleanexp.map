@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Sat Feb 04 08:42:06 2023
+AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Sun Feb 05 09:32:19 2023
 
 
 EQU  SIGNATURE_000 0000001e
@@ -590,7 +590,7 @@ CSEG P3           0000006d
 CSEG A1           0000007d
 CSEG ONE          00000081
 CSEG NEXT         00000082
-CSEG A2           00000088
-CSEG A3           00000092
-CSEG N1           00000095
-CSEG HERE1        00000098
+CSEG A2           00000089
+CSEG A3           00000093
+CSEG N1           00000096
+CSEG HERE1        000000a8
