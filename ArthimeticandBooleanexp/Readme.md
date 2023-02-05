@@ -4,3 +4,11 @@ PROGRAM FOR DATA FROM SENSOR AND CONVERTIT TO DECIMAL AND SAVE LEAST SIGNIFICANT
 
 keep learning and building on virtual machine]
 added temperature sensor reaing and saving on to different register by comparing
+
+
+## learning branch and about feature
+
+open main.asm git 
+
+not updating on main or on branch
+please 
