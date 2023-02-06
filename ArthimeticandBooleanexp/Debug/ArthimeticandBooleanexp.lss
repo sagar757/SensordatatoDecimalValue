@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Sat Feb 04 08:42:06 2023
+AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Mon Feb 06 08:22:07 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
 D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm(28): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
@@ -1072,35 +1072,60 @@ D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\mai
 00007e f010                      			BRCS ONE			;IFC=1 THEN GO TO ONE
 00007f 940c 0082                 			JMP NEXT			;GOTO NEXT
 000081 9ac1                      ONE:		SBI PORTB,1			;BIT OF PORTB IS SET TO ONE
-000082 950a                      NEXT:		DEC R16				;DECREMENT R16
-000083 f7c9                      			BRNE A1			;IF R16 IS NOTZERO THEN GO TO AGAIN
-000084 9ac1                      			SBI PORTB,1			;BIT 1 OF PORTB IS SET TO ONE
+000082 98c1                      NEXT:		CBI PORTB,1			;CLEAR BIT FOR 0 BIT
+000083 950a                      			DEC R16				;DECREMENT R16
+000084 f7c1                      			BRNE A1			;IF R16 IS NOTZERO THEN GO TO AGAIN
+000085 9ac1                      			SBI PORTB,1			;BIT 1 OF PORTB IS SET TO ONE
                                  	
                                  	;;; PROGRAM TO BRING IN ABYTE OF DATA SERIALLY VIA PC7 AND SAVE IT IN R21 REGISTER THE BYTE COMES IN WITH LSB FIRST
                                  
-000085 98a7                      			CBI DDRC, 7			; BIT 7 OF PORTC IS INPUT
-000086 e008                      			LDI R16,8			;R16 = 8
-000087 e050                      			LDI R21,0			;R21 = 0
-000088 999f                      A2:			SBIC PINC,7			;SKIP THE NEXT LINE IF BIT 7 OF PORTC IS 0
-000089 9408                      			SEC					;SET CARYY FLAG TO ONE
-00008a 9b9f                      			SBIS PINC,7			;SKIP THE NEXT LINE IF BIT 7 OF PORT C IS SET
-00008b 9488                      			CLC					;CLEAR CARYY FLAG TO ZERO
-00008c 9557                      			ROR R21				;ROTATE RIGHT R20 MOVE C FLAG TO MSB 
-00008d 950a                      			DEC R16				;DECREMENT R16
-00008e f7c9                      			BRNE A2
+000086 98a7                      			CBI DDRC, 7			; BIT 7 OF PORTC IS INPUT
+000087 e008                      			LDI R16,8			;R16 = 8
+000088 e050                      			LDI R21,0			;R21 = 0
+000089 999f                      A2:			SBIC PINC,7			;SKIP THE NEXT LINE IF BIT 7 OF PORTC IS 0
+00008a 9408                      			SEC					;SET CARYY FLAG TO ONE
+00008b 9b9f                      			SBIS PINC,7			;SKIP THE NEXT LINE IF BIT 7 OF PORT C IS SET
+00008c 9488                      			CLC					;CLEAR CARYY FLAG TO ZERO
+00008d 9557                      			ROR R21				;ROTATE RIGHT R20 MOVE C FLAG TO MSB 
+00008e 950a                      			DEC R16				;DECREMENT R16
+00008f f7c9                      			BRNE A2
                                  	;; PROGRAM TO FIND THE THE NUMBER OF 1S IN A GIVEN BYTE
                                  
-00008f e977                      			LDI R23,0X97
-000090 e0d0                      			LDI R29,0			;NUMBER OF 1S
-000091 e008                      			LDI R16,8			;NUMBER OF  BITS IN  A BYTE
-000092 9577                      A3:			ROR R23				;ROTATE RIGHT R23 AND MOVE LSB TO C FLAG
-000093 f408                      			BRCC N1				;IF C=0 THE GO TO NEXT
-000094 95d3                      			INC R29				;INCREMENT R29
-000095 950a                      N1:			DEC R16				;DEC R16
-000096 f7d9                      			BRNE A3
-000097 9547                      			ROR R20				;ONE MORE TIME TO LEAVE R23 UNCHANGED 
+000090 e977                      			LDI R23,0X97
+000091 e0d0                      			LDI R29,0			;NUMBER OF 1S
+000092 e008                      			LDI R16,8			;NUMBER OF  BITS IN  A BYTE
+000093 9577                      A3:			ROR R23				;ROTATE RIGHT R23 AND MOVE LSB TO C FLAG
+000094 f408                      			BRCC N1				;IF C=0 THE GO TO NEXT
+000095 95d3                      			INC R29				;INCREMENT R29
+000096 950a                      N1:			DEC R16				;DEC R16
+000097 f7d9                      			BRNE A3
+000098 9577                      			ROR R23				;ONE MORE TIME TO LEAVE R23 UNCHANGED 
+                                 	
+                                 	;;;packed and upacked bcd	
+                                 	;; packed bcd		UNPACKED BCD		ASCII
+                                 	;;	29H				02H & 09h			32H & 39H
+                                 	;; 0010 1001		0000 0010 &			0011 0010 &
+                                 	;;					0000 1001			0011 1001
+                                 	;; ASSUME R20 HAS PACKED BCD. WRITE A PROGRAM TO CONVERT 
                                  
-000098 cfff                      	HERE1:	RJMP HERE1
+000099 e249                      			ldi r20,0x29		;packed BCD TO BE CONVERTED IS 29
+00009a 2f54                      			MOV	R21,R20			;R21 = R20 =29H
+00009b 705f                      			ANDI R21,0X0F		;MASK THE UPPER NIBBLE  (R21 = 09H)
+00009c 6350                      			ORI R21,0X30		;MAKE IT ASCII (R21 = 39H)
+00009d 2f64                      			MOV R22,R20			;R22 = R20 = 29H
+00009e 9562                      			SWAP R22			;SWAP NIBBLES (R22 = 92H)
+00009f 706f                      			ANDI R22,0X0F		;MASK THE UPPER NIBLLE (R22 = 02)
+0000a0 6360                      			ORI R22,0X30		;MAKE IT ASCII R22 = 32H)
+                                 	
+                                 	;; ASCII TO PACKED BCD 4 AND 7 TO 47H
+0000a1 e354                      			LDI R21,'4'			;LOAD CHARACTER 4 TO R21
+0000a2 e367                      			LDI R22,'7'			;LOAD CHARACTER 7 TO R22
+0000a3 705f                      			ANDI R21,0X0F		;MASK UPPER NIBBLE OF R21
+0000a4 9552                      			SWAP R21			;SWAP NIBBLES OF R21 TO MAKE UPPER NIBBLE OF PACKED BCD
+0000a5 706f                      			ANDI R22,0X0F		;MASK UPPER NIBBLE OF R22
+0000a6 2b65                      			OR R22,R21			;JOIN R22 AND R21 TO MAKE PACKED BCD
+0000a7 2f46                      			MOV R20,R22			;MOV THE RESULT OT R20
+0000a8 cfff                      	HERE1:	RJMP HERE1
                                  
 
 
@@ -1121,37 +1146,37 @@ counted separately from r26..r31 here.
 "ATmega32" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  24 r17:  11 r18:  13 r19:   0 r20:  39 
-r21:  21 r22:   4 r23:   8 r24:   2 r25:   2 r26:   2 r27:   2 r28:   2 
+r13:   0 r14:   0 r15:   0 r16:  24 r17:  11 r18:  13 r19:   0 r20:  42 
+r21:  28 r22:  12 r23:   9 r24:   2 r25:   2 r26:   2 r27:   2 r28:   2 
 r29:   4 r30:   0 r31:   0 
 Registers used: 13 out of 35 (37.1%)
 
 "ATmega32" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   1 add   :   4 adiw  :   0 and   :   0 
-andi  :   2 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+andi  :   6 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   4 brcs  :   1 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
 brne  :   6 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   1 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   1 cbr   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   2 cbr   :   0 
 clc   :   3 clh   :   0 cli   :   0 cln   :   0 clr   :   4 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   1 cp    :   2 cpc   :   0 
 cpi   :   1 cpse  :   0 dec   :   6 eor   :   2 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   4 inc   :   4 jmp   :   1 
-ld    :   0 ldd   :   0 ldi   :  45 lds   :   1 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   4 movw  :   0 mul   :   1 muls  :   0 mulsu :   0 
-neg   :   1 nop   :   0 or    :   0 ori   :   1 out   :  11 pop   :   0 
+ld    :   0 ldd   :   0 ldi   :  48 lds   :   1 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :   7 movw  :   0 mul   :   1 muls  :   0 mulsu :   0 
+neg   :   1 nop   :   0 or    :   1 ori   :   3 out   :  11 pop   :   0 
 push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   3 rol   :   4 
 ror   :   7 sbc   :   1 sbci  :   0 sbi   :   6 sbic  :   1 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   2 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   4 
-sub   :   4 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 37 out of 113 (32.7%)
+sub   :   4 subi  :   0 swap  :   2 tst   :   0 wdr   :   0 
+Instructions used: 39 out of 113 (34.5%)
 
 "ATmega32" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000132    306      0    306   32768   0.9%
+[.cseg] 0x000000 0x000152    338      0    338   32768   1.0%
 [.dseg] 0x000060 0x000060      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
