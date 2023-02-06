@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Mon Feb 06 08:22:07 2023
+=======
+AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Sun Feb 05 09:32:19 2023
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
 D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm(28): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\2.0.401\avrasm\inc\m32def.inc'
@@ -1100,6 +1104,7 @@ D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\mai
 000096 950a                      N1:			DEC R16				;DEC R16
 000097 f7d9                      			BRNE A3
 000098 9577                      			ROR R23				;ONE MORE TIME TO LEAVE R23 UNCHANGED 
+<<<<<<< HEAD
                                  	
                                  	;;;packed and upacked bcd	
                                  	;; packed bcd		UNPACKED BCD		ASCII
@@ -1125,6 +1130,30 @@ D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\mai
 0000a5 706f                      			ANDI R22,0X0F		;MASK UPPER NIBBLE OF R22
 0000a6 2b65                      			OR R22,R21			;JOIN R22 AND R21 TO MAKE PACKED BCD
 0000a7 2f46                      			MOV R20,R22			;MOV THE RESULT OT R20
+=======
+                                 	;;; lsl rd instruction logical shift left 
+                                 
+000099 9488                      			clc 
+00009a e246                      			ldi r20,0x26		;R20=0010 0110(38) C=0
+00009b 0f44                      			LSL R20				;R20=0100 1100(76) C=0
+00009c 0f44                      			LSL R20				;R20=1001 1000(152)C=0
+00009d 0f44                      			LSL R20				;R20=0011 0000(48) C=1
+                                 
+                                 	;;;LSR RD LOGICAL SHIFT RIGHT
+                                 			
+00009e e246                      			LDI R20,0X26		;R20 = 0010 0110(38)
+00009f 9546                      			LSR R20				;R20=  0001 0011(19) C=0
+0000a0 9546                      			LSR R20				;R20 = 0000 1001(9)  C=1
+0000a1 9546                      			LSR R20				;R20 = 0000 0100(4)  C=1
+                                 	
+                                 	;;;ASR RD ARITHMETIC SHIFT RIGHT WHERE MSB REMAINS SAME BUT IT COPIES TO D6,D5 AND SO ON
+0000a2 ed40                      			LDI R20,0XD0		;R20 = 1101 0000(-48) C=0
+0000a3 9545                      			ASR	R20				;R20 = 1110 1000(-24) C=0
+0000a4 9545                      			ASR R20				;R20 = 1111 0100(-12) C=0
+0000a5 9545                      			ASR R20				;R20 = 1111 1010(-6)  C=0
+0000a6 9545                      			ASR R20				;R20 = 1111 1101(-3)  C=0
+0000a7 9545                      			ASR R20				;R20 = 1111 1110(-1)  C=1
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
 0000a8 cfff                      	HERE1:	RJMP HERE1
                                  
 
@@ -1146,18 +1175,28 @@ counted separately from r26..r31 here.
 "ATmega32" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
+<<<<<<< HEAD
 r13:   0 r14:   0 r15:   0 r16:  24 r17:  11 r18:  13 r19:   0 r20:  42 
 r21:  28 r22:  12 r23:   9 r24:   2 r25:   2 r26:   2 r27:   2 r28:   2 
+=======
+r13:   0 r14:   0 r15:   0 r16:  24 r17:  11 r18:  13 r19:   0 r20:  52 
+r21:  21 r22:   4 r23:   9 r24:   2 r25:   2 r26:   2 r27:   2 r28:   2 
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
 r29:   4 r30:   0 r31:   0 
 Registers used: 13 out of 35 (37.1%)
 
 "ATmega32" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   1 add   :   4 adiw  :   0 and   :   0 
+<<<<<<< HEAD
 andi  :   6 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+=======
+andi  :   2 asr   :   5 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
 brcc  :   4 brcs  :   1 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
 brne  :   6 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   1 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   2 cbr   :   0 
+<<<<<<< HEAD
 clc   :   3 clh   :   0 cli   :   0 cln   :   0 clr   :   4 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   1 cp    :   2 cpc   :   0 
 cpi   :   1 cpse  :   0 dec   :   6 eor   :   2 fmul  :   0 fmuls :   0 
@@ -1165,13 +1204,27 @@ fmulsu:   0 icall :   0 ijmp  :   0 in    :   4 inc   :   4 jmp   :   1
 ld    :   0 ldd   :   0 ldi   :  48 lds   :   1 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   7 movw  :   0 mul   :   1 muls  :   0 mulsu :   0 
 neg   :   1 nop   :   0 or    :   1 ori   :   3 out   :  11 pop   :   0 
+=======
+clc   :   4 clh   :   0 cli   :   0 cln   :   0 clr   :   4 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   1 cp    :   2 cpc   :   0 
+cpi   :   1 cpse  :   0 dec   :   6 eor   :   2 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   4 inc   :   4 jmp   :   1 
+ld    :   0 ldd   :   0 ldi   :  48 lds   :   1 lpm   :   0 lsl   :   3 
+lsr   :   3 mov   :   4 movw  :   0 mul   :   1 muls  :   0 mulsu :   0 
+neg   :   1 nop   :   0 or    :   0 ori   :   1 out   :  11 pop   :   0 
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
 push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   3 rol   :   4 
 ror   :   7 sbc   :   1 sbci  :   0 sbi   :   6 sbic  :   1 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   2 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   4 
+<<<<<<< HEAD
 sub   :   4 subi  :   0 swap  :   2 tst   :   0 wdr   :   0 
 Instructions used: 39 out of 113 (34.5%)
+=======
+sub   :   4 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
+Instructions used: 40 out of 113 (35.4%)
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
 
 "ATmega32" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%

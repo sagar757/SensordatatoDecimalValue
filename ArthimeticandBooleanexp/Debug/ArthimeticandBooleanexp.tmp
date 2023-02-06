@@ -38,6 +38,10 @@
   <A2><FILE>D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm</FILE><LINE>219</LINE></A2>
   <A3><FILE>D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm</FILE><LINE>231</LINE></A3>
   <N1><FILE>D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm</FILE><LINE>234</LINE></N1>
+<<<<<<< HEAD
   <HERE1><FILE>D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm</FILE><LINE>262</LINE></HERE1>
+=======
+  <HERE1><FILE>D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm</FILE><LINE>259</LINE></HERE1>
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
  </LABELS>
 </ASSEMBLER_INFO>

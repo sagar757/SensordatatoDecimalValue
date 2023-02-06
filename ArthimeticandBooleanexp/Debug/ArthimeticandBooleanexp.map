@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Mon Feb 06 08:22:07 2023
+=======
+AVRASM ver. 2.2.8  D:\software\Atmel Studio\7.0\ArthimeticandBooleanexp\ArthimeticandBooleanexp\main.asm Sun Feb 05 09:32:19 2023
+>>>>>>> c553e168434357a8ca5856643d32a7810a47649c
 
 
 EQU  SIGNATURE_000 0000001e
